@@ -27,16 +27,16 @@ export class PlansController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.plansService.findOne(+id);
+    return this.plansService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string) {
-    return this.plansService.update(+id);
+    return this.plansService.update(id);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.plansService.remove(+id);
+    return this.plansService.remove(id);
   }
 }

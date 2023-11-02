@@ -18,15 +18,15 @@ export class PlansService {
     return this.planModel.find().exec();
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.planModel.findById(id).exec();
   }
 
-  update(id: number) {
+  update(id: string) {
     return { id };
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return { id };
   }
 }
