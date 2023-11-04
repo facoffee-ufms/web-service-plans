@@ -1,4 +1,4 @@
-import { CreatePlanDto } from './dto';
+import { CreatePlanDto, UpdatePlanDto } from './dto';
 import { Plan } from './entities';
 
 import { Model } from 'mongoose';
@@ -22,11 +22,11 @@ export class PlansService {
     return this.planModel.findById(id).exec();
   }
 
-  update(id: string) {
-    return { id };
+  update(id: string, dto: UpdatePlanDto) {
+    return this.planModel.updateOne({ _id: id }, dto);
   }
 
   remove(id: string) {
-    return { id };
+    return this.planModel.deleteOne({ _id: id });
   }
 }
