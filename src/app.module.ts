@@ -10,7 +10,7 @@ import { TeachersModule } from './teachers/teachers.module';
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGODB_URL),
     PlansModule,
-    TeachersModule
+    TeachersModule,
   ],
 })
 export class AppModule {}

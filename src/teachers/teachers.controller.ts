@@ -1,13 +1,13 @@
-import { Body, Controller, Inject, Put } from "@nestjs/common";
-import { TeachersService } from "./teachers.service";
+import { Body, Controller, Put } from '@nestjs/common';
+import { TeachersService } from './teachers.service';
+import { SignPlanDTO } from './dto/signPlan.dto';
 
-@Controller('teacher')
+@Controller('teachers')
 export class TeachersController {
-    constructor(private teacherService: TeachersService){}
+  constructor(private teacherService: TeachersService) {}
 
-    @Put('')
-    async signPlan(@Body() dto) {
-        const newSignature = await this.teacherService.signPlan(dto)
-        return newSignature
-    }
+  @Put()
+  async signPlan(@Body() dto: SignPlanDTO) {
+    return await this.teacherService.signPlan(dto);
+  }
 }
