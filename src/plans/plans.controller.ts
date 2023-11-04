@@ -1,5 +1,5 @@
 import { PlansService } from './plans.service';
-import { CreatePlanDto } from './dto';
+import { CreatePlanDto, UpdatePlanDto } from './dto';
 
 import {
   Body,
@@ -31,8 +31,8 @@ export class PlansController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string) {
-    return this.plansService.update(id);
+  update(@Param('id') id: string, @Body() dto: UpdatePlanDto) {
+    return this.plansService.update(id, dto);
   }
 
   @Delete(':id')

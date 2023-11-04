@@ -1,5 +1,10 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
+export interface Items {
+  name: string;
+  count: number;
+}
+
 export class CreatePlanDto {
   @IsNotEmpty()
   @IsString()
@@ -15,7 +20,17 @@ export class CreatePlanDto {
   items: Items[];
 }
 
-export interface Items {
+export class UpdatePlanDto {
+  @IsNotEmpty()
+  @IsString()
   name: string;
-  count: number;
+
+  @IsNotEmpty()
+  price: number;
+
+  @IsNotEmpty()
+  durationDays: number;
+
+  @IsNotEmpty()
+  items: Items[];
 }
