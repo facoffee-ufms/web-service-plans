@@ -12,8 +12,11 @@ export class SubscriptionsService {
   ) {}
 
   create(dto: CreateSubscriptionDto) {
-    const createdPlan = new this.subscriptionModel(dto);
-    return createdPlan.save();
+    const createdSubscription = new this.subscriptionModel({
+      createdAt: dto.createdAt,
+      plans: [dto.firstPlan],
+    });
+    return createdSubscription.save();
   }
 
   findAll() {
@@ -25,7 +28,13 @@ export class SubscriptionsService {
   }
 
   update(id: string, dto: UpdateSubscriptionDto) {
-    return this.subscriptionModel.updateOne({ _id: id }, dto);
+    return this.subscriptionModel
+      .findOneAndUpdate(
+        { _id: id },
+        { updatedAt: dto.updatedAt },
+        { $push: { plans: dto.newPlan } },
+      )
+      .exec();
   }
 
   remove(id: string) {

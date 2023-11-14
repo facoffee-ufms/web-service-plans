@@ -11,7 +11,7 @@ export class CreateSubscriptionDto {
   createdAt: string;
 
   @IsNotEmpty()
-  plans: PlanHistory[];
+  firstPlan: PlanHistory;
 }
 
 export class UpdateSubscriptionDto {
@@ -20,5 +20,5 @@ export class UpdateSubscriptionDto {
   updatedAt: string;
 
   @IsNotEmpty()
-  plans: PlanHistory[];
+  newPlan: PlanHistory;
 }

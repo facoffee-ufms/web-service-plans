@@ -11,5 +11,6 @@ import { Module } from '@nestjs/common';
     ]),
   ],
   providers: [SubscriptionsService],
+  exports: [SubscriptionsService],
 })
 export class SubscriptionsModule {}
