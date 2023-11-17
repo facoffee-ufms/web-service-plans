@@ -37,15 +37,16 @@ export class TeachersController {
       throw new ForbiddenException(`Plan ${dto.planId} doesn't exist`);
     }
 
-    this.subscriptionService.create({
-      createdAt: new Date().toISOString(),
+    const subscription = await this.subscriptionService.create({
+      createdAt: new Date(),
       firstPlan: {
         planId: plan.id,
         planName: plan.name,
+        updatedAt: new Date(),
       },
     });
 
-    return await this.teacherService.signPlan(dto);
+    return await this.teacherService.signPlan(subscription.id, dto);
   }
 
   @ApiOperation({ summary: 'Update teacher' })
@@ -68,15 +69,14 @@ export class TeachersController {
     }
 
     if (dto.planId != teacher.planId) {
-      const result = await this.subscriptionService.update(
-        teacher.subscriptionId,
-        {
-          updatedAt: new Date().toISOString(),
-          newPlan: { planId: newPlan.id, planName: newPlan.name },
+      await this.subscriptionService.update(teacher.subscriptionId, {
+        updatedAt: new Date(),
+        newPlan: {
+          planId: newPlan.id,
+          planName: newPlan.name,
+          updatedAt: new Date(),
         },
-      );
-
-      console.log(result);
+      });
     }
 
     return await this.teacherService.update(id, dto);

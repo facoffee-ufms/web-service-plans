@@ -6,16 +6,20 @@ export type SubscriptionDocument = HydratedDocument<Subscription>;
 @Schema()
 export class Subscription {
   @Prop()
-  createdAt: string;
+  createdAt: Date;
 
   @Prop()
-  updatedAt: string;
+  renew: boolean;
+
+  @Prop()
+  updatedAt: Date;
 
   @Prop()
   plans: [
     {
       planId: string;
       planName: string;
+      updatedAt: Date;
     },
   ];
 }

@@ -3,12 +3,13 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export interface PlanHistory {
   planId: string;
   planName: string;
+  updatedAt: Date;
 }
 
 export class CreateSubscriptionDto {
   @IsNotEmpty()
   @IsString()
-  createdAt: string;
+  createdAt: Date;
 
   @IsNotEmpty()
   firstPlan: PlanHistory;
@@ -17,7 +18,7 @@ export class CreateSubscriptionDto {
 export class UpdateSubscriptionDto {
   @IsNotEmpty()
   @IsString()
-  updatedAt: string;
+  updatedAt: Date;
 
   @IsNotEmpty()
   newPlan: PlanHistory;
