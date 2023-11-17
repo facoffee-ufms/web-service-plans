@@ -9,6 +9,7 @@ import {
   Body,
   Controller,
   ForbiddenException,
+  Get,
   Param,
   Patch,
   Put,
@@ -80,5 +81,16 @@ export class TeachersController {
     }
 
     return await this.teacherService.update(id, dto);
+  }
+
+  @Get(':id/subscriptions')
+  async findAllSubscriptions(@Param('id') id: string) {
+    const teacher = await this.teacherService.findOne(id);
+
+    if (!teacher) {
+      throw new ForbiddenException(`Teacher ${id} doesn't exist`);
+    }
+
+    return await this.subscriptionService.findOne(teacher.subscriptionId);
   }
 }
