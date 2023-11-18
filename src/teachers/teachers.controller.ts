@@ -3,6 +3,7 @@ import { SubscriptionsService } from '../subscriptions/subscriptions.service';
 import { PlansService } from '../plans/plans.service';
 import { Teacher } from './entities/teacher.entity';
 import { SignPlanDTO, UpdateTeacherDto } from './dto';
+import { differenceInDays } from './utils';
 
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
@@ -13,6 +14,7 @@ import {
   Param,
   Patch,
   Put,
+  Query,
 } from '@nestjs/common';
 
 @ApiTags('teachers')
@@ -92,5 +94,35 @@ export class TeachersController {
     }
 
     return await this.subscriptionService.findOne(teacher.subscriptionId);
+  }
+
+  @Patch(':id/subscriptions')
+  async renewPlan(@Param('id') id: string, @Query('renew') renew: string) {
+    const renewBool = renew === 'true' ? true : false;
+    const teacher = await this.teacherService.findOne(id);
+
+    if (!teacher) {
+      throw new ForbiddenException(`Teacher ${id} doesn't exist`);
+    }
+
+    this.subscriptionService.renewPlan(teacher.subscriptionId, renewBool);
+
+    const today = new Date();
+    const plan = await this.planService.findOne(teacher.planId);
+
+    if (renewBool) {
+      await this.subscriptionService.renewPlan(teacher.subscriptionId, true);
+      return { today, remainingDays: plan.durationDays };
+    } else {
+      const subscription = await this.subscriptionService.findOne(
+        teacher.subscriptionId,
+      );
+
+      return {
+        today,
+        remainingDays:
+          plan.durationDays - differenceInDays(subscription.updatedAt, today),
+      };
+    }
   }
 }

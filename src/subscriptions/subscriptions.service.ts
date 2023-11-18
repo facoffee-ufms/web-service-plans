@@ -39,6 +39,17 @@ export class SubscriptionsService {
       .exec();
   }
 
+  renewPlan(id: string, renew: boolean) {
+    return this.subscriptionModel
+      .updateOne(
+        { _id: id },
+        {
+          $set: { renew: renew, updatedAt: new Date() },
+        },
+      )
+      .exec();
+  }
+
   remove(id: string) {
     return this.subscriptionModel.deleteOne({ _id: id });
   }
