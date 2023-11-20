@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SignPlanDTO } from './dto/signPlan.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { Teacher } from './entities/teacher.entity';
 import { UpdateTeacherDto } from './dto';
 
@@ -9,8 +9,7 @@ import { UpdateTeacherDto } from './dto';
 export class TeachersService {
   constructor(@InjectModel('Teacher') private teacherModel: Model<Teacher>) {}
 
-  signPlan(dto: SignPlanDTO) {
-    const subscriptionId = new Types.ObjectId();
+  signPlan(subscriptionId: string, dto: SignPlanDTO) {
     return this.teacherModel.create({ ...dto, subscriptionId });
   }
 

@@ -14,7 +14,7 @@ export class SubscriptionsService {
   create(dto: CreateSubscriptionDto) {
     const createdSubscription = new this.subscriptionModel({
       createdAt: dto.createdAt,
-      plans: [dto.firstPlan],
+      plans: [{ ...dto.firstPlan, updatedAt: new Date() }],
     });
     return createdSubscription.save();
   }
@@ -29,10 +29,23 @@ export class SubscriptionsService {
 
   update(id: string, dto: UpdateSubscriptionDto) {
     return this.subscriptionModel
-      .findOneAndUpdate(
+      .updateOne(
         { _id: id },
-        { updatedAt: dto.updatedAt },
-        { $push: { plans: dto.newPlan } },
+        {
+          $set: { updatedAt: dto.updatedAt },
+          $push: { plans: dto.newPlan },
+        },
+      )
+      .exec();
+  }
+
+  renewPlan(id: string, renew: boolean) {
+    return this.subscriptionModel
+      .updateOne(
+        { _id: id },
+        {
+          $set: { renew: renew, updatedAt: new Date() },
+        },
       )
       .exec();
   }

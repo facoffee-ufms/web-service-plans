@@ -1,6 +1,7 @@
 import { PlansService } from './plans.service';
 import { Plan } from './entities';
 import { CreatePlanDto, UpdatePlanDto } from './dto';
+import { DeletedPlanResponse } from './responses';
 
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
@@ -33,6 +34,7 @@ export class PlansController {
   @ApiResponse({
     status: 200,
     description: 'All plans',
+    type: [Plan],
   })
   @Get()
   findAll() {
@@ -54,6 +56,7 @@ export class PlansController {
   @ApiResponse({
     status: 200,
     description: 'The updated plan',
+    type: Plan,
   })
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdatePlanDto) {
@@ -63,7 +66,8 @@ export class PlansController {
   @ApiOperation({ summary: 'Delete plan' })
   @ApiResponse({
     status: 200,
-    description: 'The deleted plan',
+    description: 'The deleted plan result',
+    type: DeletedPlanResponse,
   })
   @Delete(':id')
   remove(@Param('id') id: string) {
