@@ -3,6 +3,8 @@ import { SubscriptionsService } from '../subscriptions/subscriptions.service';
 import { PlansService } from '../plans/plans.service';
 import { Teacher } from './entities/teacher.entity';
 import { SignPlanDTO, UpdateTeacherDto } from './dto';
+import { Subscription } from '../subscriptions/entities';
+import { RenewSubscriptionResponse } from './responses';
 import { differenceInDays } from './utils';
 
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -85,6 +87,12 @@ export class TeachersController {
     return await this.teacherService.update(id, dto);
   }
 
+  @ApiOperation({ summary: 'Find Subscriptions of Teacher' })
+  @ApiResponse({
+    status: 200,
+    description: 'All subscriptions from teacher',
+    type: Subscription,
+  })
   @Get(':id/subscriptions')
   async findAllSubscriptions(@Param('id') id: string) {
     const teacher = await this.teacherService.findOne(id);
@@ -96,6 +104,12 @@ export class TeachersController {
     return await this.subscriptionService.findOne(teacher.subscriptionId);
   }
 
+  @ApiOperation({ summary: 'Renew Teacher Subscription' })
+  @ApiResponse({
+    status: 200,
+    description: 'Subscription new state',
+    type: RenewSubscriptionResponse,
+  })
   @Patch(':id/subscriptions')
   async renewPlan(@Param('id') id: string, @Query('renew') renew: string) {
     const renewBool = renew === 'true' ? true : false;
