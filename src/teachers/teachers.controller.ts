@@ -1,13 +1,19 @@
 import { TeachersService } from './teachers.service';
 import { SubscriptionsService } from '../subscriptions/subscriptions.service';
 import { PlansService } from '../plans/plans.service';
+import { AuthGuard } from '../auth/auth.guard';
 import { Teacher } from './entities/teacher.entity';
 import { SignPlanDTO, UpdateTeacherDto } from './dto';
 import { Subscription } from '../subscriptions/entities';
 import { RenewSubscriptionResponse } from './responses';
 import { differenceInDays } from './utils';
 
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -17,8 +23,11 @@ import {
   Patch,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @ApiTags('teachers')
 @Controller('teachers')
 export class TeachersController {
@@ -31,7 +40,7 @@ export class TeachersController {
   @Put()
   @ApiOperation({ summary: 'Sign teacher' })
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'The signed teacher',
     type: Teacher,
   })

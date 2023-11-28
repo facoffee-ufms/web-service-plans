@@ -17,6 +17,7 @@ async function bootstrap() {
       'Serviço com foco no registro de planos e assinatura de usuários',
     )
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
