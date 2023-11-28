@@ -1,9 +1,15 @@
 import { PlansService } from './plans.service';
+import { AuthGuard } from '../auth/auth.guard';
 import { Plan } from './entities';
 import { CreatePlanDto, UpdatePlanDto } from './dto';
 import { DeletedPlanResponse } from './responses';
 
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -12,8 +18,11 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @ApiTags('plans')
 @Controller('plans')
 export class PlansController {
