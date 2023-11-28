@@ -1,3 +1,4 @@
+import { AuthModule } from './auth/auth.module';
 import { PlansModule } from './plans/plans.module';
 import { TeachersModule } from './teachers/teachers.module';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
@@ -10,6 +11,7 @@ import { Module } from '@nestjs/common';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGODB_URL),
+    AuthModule,
     PlansModule,
     TeachersModule,
     SubscriptionsModule,
