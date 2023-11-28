@@ -1,3 +1,4 @@
+import { JwtService } from '@nestjs/jwt';
 import { HttpService } from '@nestjs/axios';
 import {
   CanActivate,
@@ -10,7 +11,10 @@ import { catchError, firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -20,6 +24,18 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
+    const payload = await this.jwtService.decode(token);
+
+    await this.validateWithServer(token);
+
+    request['roles'] = payload.realm_access.roles;
+    request['email'] = payload.email;
+    request['sub'] = payload.sub;
+
+    return true;
+  }
+
+  async validateWithServer(token: string) {
     const config = {
       method: 'get',
       url: `${process.env.KC_BASE_URL}/realms/${process.env.KC_REALM}/protocol/openid-connect/userinfo`,
@@ -34,9 +50,7 @@ export class AuthGuard implements CanActivate {
       ),
     );
 
-    request['sub'] = data.sub;
-
-    return true;
+    return data;
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
